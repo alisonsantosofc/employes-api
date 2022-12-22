@@ -1,0 +1,175 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Employees API Docs",
+    "description": "This is an API to manage employees.",
+    "version": "1.0.0",
+    "contact": {
+      "email": "alison.frontend.developer@gmail.com"
+    }
+  },
+  "definitions": {
+    "User": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "admin": {
+          "type": "boolean"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create User",
+        "description": "Create a new user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "John Doe",
+                  "email": "johndoe@email.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created."
+          },
+          "500": {
+            "description": "User email already exists."
+          }
+        }
+      },
+      "get": {
+        "tags": ["Users"],
+        "summary": "List Users",
+        "description": "List all users.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "header",
+            "required": true,
+            "description": "User admin id.",
+            "schema": {
+              "type" : "string(uuid)"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully users listed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/User"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User is not admin."
+          }
+        }
+      }
+    },
+
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Show User",
+        "description": "Show user information.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "User id to show information.",
+            "schema": {
+              "type" : "string(uuid)"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully get user information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User does not exists."
+          }
+        }
+      }
+    },
+
+    "/users/{user_id}/admin": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Turn User Admin",
+        "description": "Turn user as admin.",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "description": "User id to turn admin.",
+            "schema": {
+              "type" : "string(uuid)"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User turned admin successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User does not exists."
+          }
+        }
+      }
+    }
+  }
+}
